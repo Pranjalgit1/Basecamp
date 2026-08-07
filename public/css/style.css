@@ -1,3 +1,7 @@
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
 .navbar {
     height: 4rem;
     background-color: antiquewhite;
@@ -8,7 +12,48 @@
     font-size: 2rem;
 }
 
+.card-img-overlay {
+    opacity: 0;
+}
+
+.card-img-overlay:hover {
+    opacity: 0.5;
+}
+
+.listing-link{
+    text-decoration: none;
+}
 
 .nav-link{
     color: #222222 !important;
+}
+
+.f-info-links a{
+    text-decoration: none;
+    color: #222222;
+    
+}
+
+
+.f-info-links a:hover{
+    text-decoration: underline;
+    color: rgb(11, 172, 228);
+}
+
+.f-info-links{
+    width: 100%;
+}
+
+.f-info-socials{
+    width: 100%;
+}
+
+.f-info{
+    display: flex;
+    height: 6rem;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: antiquewhite;
+    flex-wrap: wrap;
+    text-align: center;
 }

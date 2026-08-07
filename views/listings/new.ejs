@@ -1,19 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h4>Create a new Listing</h4>
-    <form method = "post" action = "/listings">
-        <input type="text" name="listing[title]" placeholder="enter title">
-        <input type="text" name="listing[description]" placeholder="enter description">
-        <input type="number" name="listing[price]" placeholder="enter price">
-        <input type="text" name="listing[location]" placeholder="enter location">
-        <input type="text" name="listing[country]" placeholder="enter country">
-        <button type = "submit">Submit</button>
-    </form>
-</body>
-</html>
+<% layout("layouts/boilerplate.ejs") %>
+
+<div class="row mt-4">
+    <div class="col-8 offset-2">
+        <h3>Create a New Listing</h3>
+        <form method="POST" action="/listings">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" name="listing[title]" placeholder="Enter a catchy title" class="form-control" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea name="listing[description]" placeholder="Describe your place..." class="form-control" rows="4" required></textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="image" class="form-label">Image URL</label>
+                <input type="text" name="listing[image]" placeholder="Enter an image link (e.g. Unsplash)" class="form-control" required>
+            </div>
+            
+            <div class="row">
+                <div class="mb-3 col-md-4">
+                    <label for="price" class="form-label">Price per night</label>
+                    <input type="number" name="listing[price]" placeholder="1200" class="form-control" required>
+                </div>
+                
+                <div class="mb-3 col-md-8">
+                    <label for="country" class="form-label">Country</label>
+                    <input type="text" name="listing[country]" placeholder="India" class="form-control" required>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" name="listing[location]" placeholder="Goa, Mumbai, etc..." class="form-control" required>
+            </div>
+            
+            <button class="btn btn-danger btn-lg mb-5 mt-4">Create Listing</button>
+        </form>
+    </div>
+</div>

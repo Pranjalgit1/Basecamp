@@ -1,29 +1,35 @@
 <% layout("layouts/boilerplate.ejs") %>
 
-<body>
+
     <h3>All Listings</h3>
     <!-- <form method = "GET" action = "/listings/new">
         <button>
             Create New Listing
         </button>
     </form> --> 
-    <ul>
-        <% for(listing of listings) { %>
-            <li>
-                <strong>ID:</strong> <%= listing._id %>
-            </li>
-            <li>
-                <a href="/listings/<%= listing._id %>"><%= listing.title %></a>
-            </li>
-            <li><%= listing.description %></li>
-            <li>Price: <%= listing.price %></li>
-            <li>Location: <%= listing.location %>, <%= listing.country %></li>
-            <li>
-                <a href="/listings/<%= listing._id %>/edit">
-                    <button>Edit</button>
-                </a>
-            </li>
-            <hr>
-        <% } %>
-    </ul>
-</body>
+    <div class="row row-cols-md-2 row-cols-lg-3 row-cols-sm-1">
+         <% for(listing of listings) { %>
+            <a href = "/listings/<%= listing._id %>" class = "listing-link">
+                <div class="col mb-4">
+            <div class="card">
+                <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem; object-fit: cover;">
+                <div class = "card-img-overlay">abcd</div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <strong><%= listing.title %></strong> <br>
+                            <%= listing.description %> <br>
+                            $<%= listing.price.toLocaleString("en-IN") %> / night<br>
+                            <%= listing.location %>, <%= listing.country %>
+                        </p>
+                    </div>
+            </div>
+         </div> 
+
+            </a>
+         
+         <% } %>
+    </div>
+
+
+ 
+
