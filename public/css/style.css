@@ -1,0 +1,14 @@
+.navbar {
+    height: 4rem;
+    background-color: antiquewhite;
+}
+
+.fa-house{
+    color: #ff385c;
+    font-size: 2rem;
+}
+
+
+.nav-link{
+    color: #222222 !important;
+}
