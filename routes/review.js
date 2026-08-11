@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true }); //merges parent params with child params
-const {listingSchema, reviewSchema } = require("../schema.js");
-const Review = require("../models/review.js");
-const Listing = require("../models/listing.js");
+const { listingSchema, reviewSchema } = require("../schema.js");
 const { isLoggedIn, isReviewAuthor } = require("../middleware.js");
+
+const reviewController = require("../controllers/reviews.js");
 
 const validateReview = (req, res, next) => {
     let { error } = reviewSchema.validate(req.body);
@@ -15,34 +15,10 @@ const validateReview = (req, res, next) => {
     }
 };
 
-router.post("/", isLoggedIn, validateReview, async(req,res) => {
-    try {
-        let { id } = req.params;
-        let listing = await Listing.findById(id);
-        let review = new Review(req.body.review);
-        review.author = req.user._id;
-        listing.reviews.push(review);
-        await review.save();
-        await listing.save();
-        req.flash("success", "Review added successfully!");
-        res.redirect(`/listings/${id}`);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send("Error adding review");
-    }
-})
+// Create Review Route
+router.post("/", isLoggedIn, validateReview, reviewController.createReview);
 
-router.delete("/:reviewId", isLoggedIn, isReviewAuthor, async (req,res)=>{
-    try {
-        let {id, reviewId} = req.params;
-        await Listing.findByIdAndUpdate(id, {$pull: {reviews: reviewId}}); //pull removes all matching instances
-        await Review.findByIdAndDelete(reviewId);
-        req.flash("success", "Review deleted!");
-        res.redirect(`/listings/${id}`);
-    } catch (err) {
-        console.error(err);
-        res.status(500).send("Error deleting review");
-    }
-})
+// Delete Review Route
+router.delete("/:reviewId", isLoggedIn, isReviewAuthor, reviewController.destroyReview);
 
 module.exports = router;
