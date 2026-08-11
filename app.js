@@ -1,4 +1,8 @@
+require('dotenv').config();
+
 const express = require("express");
+
+
 const app = express();
 const mongoose = require("mongoose");
 const mongo_url = "mongodb://127.0.0.1:27017/wanderlust";
@@ -32,6 +36,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"/public")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const sessionOptions = {
     secret : "pranjal",
@@ -69,7 +74,12 @@ app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews",reviewsRouter);
 app.use("/users",userRouter);
 
+app.use((err, req, res, next) => {
+    console.error("Global Error Handler caught:", err);
+    req.flash("error", err.message || "Something went wrong!");
+    res.redirect("/listings");
+});
+
 app.listen(3000, () => {
     console.log("server is listening on port 3000");
 });
-
