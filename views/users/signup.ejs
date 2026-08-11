@@ -1,0 +1,113 @@
+<% layout("layouts/boilerplate.ejs") %>
+
+<div class="signup-wrapper">
+    <div class="signup-card">
+        <div class="signup-header">
+            <i class="fa-solid fa-house signup-logo"></i>
+            <h2 class="signup-title">Join Basecamp</h2>
+            <p class="signup-subtitle">Create your account and start exploring amazing stays</p>
+        </div>
+
+        <form method="POST" action="/users/signup" class="signup-form needs-validation" id="signupForm" novalidate>
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <div class="input-icon-wrap">
+                    <i class="fa-solid fa-user input-icon"></i>
+                    <input type="text" name="username" id="username" placeholder="Choose a username" class="form-control signup-input" required autofocus>
+                </div>
+                <div class="invalid-feedback">Please choose a username.</div>
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <div class="input-icon-wrap">
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input type="email" name="email" id="email" placeholder="you@example.com" class="form-control signup-input" required
+                        pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}">
+                </div>
+                <div class="invalid-feedback">Please enter a valid email (e.g. you@example.com).</div>
+
+                <!-- Email format hints -->
+                <div class="pw-rules" id="emailRules">
+                    <div class="pw-rule" id="ruleAt">
+                        <i class="fa-solid fa-circle-xmark pw-rule-icon"></i>
+                        <span>Must contain @ symbol</span>
+                    </div>
+                    <div class="pw-rule" id="ruleDomain">
+                        <i class="fa-solid fa-circle-xmark pw-rule-icon"></i>
+                        <span>Valid domain (e.g. email.com, gmail.com)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-icon-wrap">
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <input type="password" name="password" id="password" placeholder="Create a strong password" class="form-control signup-input" required
+                        minlength="8" pattern="^(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=\[\]{};':&quot;\\|,.<>\/?]).{8,}$">
+                </div>
+                <div class="invalid-feedback">Password must meet all requirements below.</div>
+
+                <!-- Password strength hints -->
+                <div class="pw-rules" id="pwRules">
+                    <div class="pw-rule" id="ruleLength">
+                        <i class="fa-solid fa-circle-xmark pw-rule-icon"></i>
+                        <span>At least 8 characters</span>
+                    </div>
+                    <div class="pw-rule" id="ruleNumber">
+                        <i class="fa-solid fa-circle-xmark pw-rule-icon"></i>
+                        <span>Contains a number (0-9)</span>
+                    </div>
+                    <div class="pw-rule" id="ruleSpecial">
+                        <i class="fa-solid fa-circle-xmark pw-rule-icon"></i>
+                        <span>Contains a special character (!@#$...)</span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn signup-btn">Create Account</button>
+        </form>
+
+        <div class="signup-footer">
+            <p>Already have an account? <a href="/users/login" class="signup-link">Log in</a></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const pwInput = document.getElementById('password');
+    const ruleLength = document.getElementById('ruleLength');
+    const ruleNumber = document.getElementById('ruleNumber');
+    const ruleSpecial = document.getElementById('ruleSpecial');
+
+    const emailInput = document.getElementById('email');
+    const ruleAt = document.getElementById('ruleAt');
+    const ruleDomain = document.getElementById('ruleDomain');
+
+    function updateRule(el, passed) {
+        const icon = el.querySelector('.pw-rule-icon');
+        if (passed) {
+            el.classList.add('pw-rule-pass');
+            el.classList.remove('pw-rule-fail');
+            icon.className = 'fa-solid fa-circle-check pw-rule-icon';
+        } else {
+            el.classList.remove('pw-rule-pass');
+            el.classList.add('pw-rule-fail');
+            icon.className = 'fa-solid fa-circle-xmark pw-rule-icon';
+        }
+    }
+
+    pwInput.addEventListener('input', () => {
+        const val = pwInput.value;
+        updateRule(ruleLength, val.length >= 8);
+        updateRule(ruleNumber, /[0-9]/.test(val));
+        updateRule(ruleSpecial, /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(val));
+    });
+
+    emailInput.addEventListener('input', () => {
+        const val = emailInput.value;
+        updateRule(ruleAt, val.includes('@'));
+        updateRule(ruleDomain, /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(val));
+    });
+</script>
