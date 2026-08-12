@@ -23,8 +23,20 @@ async function geocodeAddress(location, country) {
 
 module.exports.index = async (req, res) => {
     try {
-        const allListings = await Listing.find({});
-        res.render("listings/index.ejs", { listings: allListings });
+        const { category, search } = req.query;
+        let filter = {};
+        if (category) {
+            filter.category = category;
+        }
+        if (search) {
+            filter.$or = [
+                { location: { $regex: search, $options: "i" } },
+                { country: { $regex: search, $options: "i" } },
+                { title: { $regex: search, $options: "i" } }
+            ];
+        }
+        const allListings = await Listing.find(filter);
+        res.render("listings/index.ejs", { listings: allListings, activeCategory: category || "", searchQuery: search || "" });
     } catch (err) {
         console.error(err);
         res.status(500).send("Error fetching listings");

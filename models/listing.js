@@ -35,6 +35,10 @@ const ListingSchema = new Schema({
             type: [Number],
             default: [0, 0]  // [longitude, latitude]
          }
+      },
+      category:{
+         type : String,
+         enum : ["beach","mountain","city","castle","farm","swimming pool","camping","iconic cities","rooms","trending"],
       }
 });
 

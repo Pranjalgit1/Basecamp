@@ -1,27 +1,69 @@
+<style>
+  .btn-search{
+    background-color: #e7555f;
+    color: white;
+    border-radius: 25px;
+    padding: 0.25rem 0.9rem;
+    cursor: pointer;
+    border-color: #e7555f;
+  }
+  .btn-search:hover{
+    color: white;
+    background-color: #d31a1a;
+    border-color: #d31a1a;
+  }
+  .btn-search i {
+    display: inline;
+    margin-right: 0.5rem;
+
+  }
+  .search-inp{
+    border-radius: 25px;
+    padding: 0.25rem 0.5rem;
+    
+  }
+</style>
+
 <nav class="navbar navbar-expand-sm bg-body-antiquewhite border-bottom sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/"><i class="fa-solid fa-house"></i></a>
+    <a class="navbar-brand" href="/listings"><i class="fa-solid fa-house"></i></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link mt-2" href="/">Home</a>
-        
-        <a class="nav-link mt-2" href="/listings">All Listings</a>
-        <a class="nav-link mt-2" href="/listings/new">Add new Listing</a>
-       
+        <a class="nav-link mt-2" href="/listings"><i class="fa-regular fa-compass"></i> Explore</a>
+              
       </div>
 
       <div class="navbar-nav ms-auto">
+        <form class="d-flex" role="search" action="/listings" method="GET">
+        <input id="navSearchInput" class="search-inp form-control me-2" type="search" name="search" placeholder="Search destinations" aria-label="Search" value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+        <button class="btn-search" type="submit"><i class="fa-solid fa-search"></i>Search</button>
+      </form>
+      <script>
+          const searchInput = document.getElementById('navSearchInput');
+          if (searchInput) {
+              searchInput.addEventListener('keydown', function(e) {
+                  if ((e.ctrlKey || e.metaKey) && (e.key === 'a' || e.key === 'A')) {
+                      e.preventDefault();
+                      this.select();
+                  }
+              });
+          }
+      </script>
+    </div>
+
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link mt-2" href="/listings/new"><i class="fa-solid fa-add"></i> Add Listing</a> 
         <% if (currUser) { %>
           <span class="nav-link mt-2 nav-user-info">
             <i class="fa-solid fa-user-circle"></i> <%= currUser.username %>
           </span>
-          <a class="nav-link mt-2 nav-logout-btn" href="/users/logout">Logout</a>
+          <a class="nav-link mt-2 nav-logout-btn" href="/users/logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
         <% } else { %>
-          <a class="nav-link mt-2" href="/users/signup">Sign Up</a>
-          <a class="nav-link mt-2" href="/users/login">Log In</a>
+          <a class="nav-link mt-2" href="/users/signup"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
+          <a class="nav-link mt-2" href="/users/login"><i class="fa-solid fa-right-to-bracket"></i> Log In</a>
         <% } %>
       </div>
     </div>
