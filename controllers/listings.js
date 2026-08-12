@@ -1,5 +1,26 @@
 const Listing = require("../models/listing.js");
 
+// Geocode an address using OpenStreetMap Nominatim (free, no API key needed)
+async function geocodeAddress(location, country) {
+    try {
+        const query = encodeURIComponent(`${location}, ${country}`);
+        const url = `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`;
+        const response = await fetch(url, {
+            headers: { "User-Agent": "WanderLust-AirBnB-Clone/1.0" }
+        });
+        const data = await response.json();
+        if (data && data.length > 0) {
+            return {
+                type: "Point",
+                coordinates: [parseFloat(data[0].lon), parseFloat(data[0].lat)]
+            };
+        }
+    } catch (err) {
+        console.error("Geocoding error:", err.message);
+    }
+    return { type: "Point", coordinates: [0, 0] };
+}
+
 module.exports.index = async (req, res) => {
     try {
         const allListings = await Listing.find({});
@@ -39,7 +60,14 @@ module.exports.createListing = async (req, res) => {
         let filename = req.file ? req.file.filename : "listingimage";
         const newListing = new Listing(req.body.listing);
         newListing.owner = req.user._id;
-        newListing.image = {url, filename};   
+        newListing.image = {url, filename};
+        
+        // Geocode the location
+        newListing.geometry = await geocodeAddress(
+            req.body.listing.location, 
+            req.body.listing.country
+        );
+        
         await newListing.save();
         req.flash("success", "New listing created successfully!");
         res.redirect("/listings");
@@ -74,8 +102,17 @@ module.exports.updateListing = async (req, res) => {
                 url: req.file.path,
                 filename: req.file.filename
             };
-            await listing.save();
         }
+        
+        // Re-geocode if location or country changed
+        if (req.body.listing.location || req.body.listing.country) {
+            listing.geometry = await geocodeAddress(
+                req.body.listing.location || listing.location, 
+                req.body.listing.country || listing.country
+            );
+        }
+        
+        await listing.save();
         req.flash("success", "Listing updated successfully!");
         res.redirect(`/listings/${id}`);
     } catch (err) {

@@ -28,7 +28,8 @@ const initDB = async () => {
     data.data = data.data.map((obj) => ({ 
         ...obj, 
         owner: user._id,
-        rating: Math.floor(Math.random() * 5) + 1 
+        rating: Math.floor(Math.random() * 5) + 1,
+        geometry: obj.geometry || { type: "Point", coordinates: [0, 0] }
     }));
     
     await Listing.insertMany(data.data);

@@ -28,6 +28,40 @@
             </div>
         </div>
 
+        <!-- Where you'll be - Map Section -->
+        <div class="mb-4">
+            <h4 style="font-weight: 600; margin-bottom: 0.25rem;">Where you'll be</h4>
+            <p class="text-muted mb-3"><%= listing.location %>, <%= listing.country %></p>
+            <div id="map" style="height: 350px; border-radius: 1rem; z-index: 1;"
+                 data-lat="<%= listing.geometry && listing.geometry.coordinates ? listing.geometry.coordinates[1] : 0 %>"
+                 data-lng="<%= listing.geometry && listing.geometry.coordinates ? listing.geometry.coordinates[0] : 0 %>"
+                 data-title="<%= listing.title %>"
+                 data-location="<%= listing.location %>"
+                 data-country="<%= listing.country %>">
+            </div>
+        </div>
+
+        <script>
+            window.addEventListener('load', function() {
+                const mapElement = document.getElementById('map');
+                const lat = parseFloat(mapElement.getAttribute('data-lat'));
+                const lng = parseFloat(mapElement.getAttribute('data-lng'));
+                const title = mapElement.getAttribute('data-title');
+                const location = mapElement.getAttribute('data-location');
+                const country = mapElement.getAttribute('data-country');
+                
+                const map = L.map('map').setView([lat, lng], 13);
+                
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+                
+                const marker = L.marker([lat, lng]).addTo(map);
+                marker.bindPopup("<b>" + title + "</b><br>" + location + ", " + country).openPopup();
+            });
+        </script>
+
         <% if (currUser && (currUser._id.equals(listing.owner._id) || currUser.username === "pranjal")) { %>
             <div class="d-flex mb-5">
                 <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark me-3 px-4 btn-lg">Edit</a>
