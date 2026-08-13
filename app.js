@@ -43,7 +43,7 @@ app.use(express.static(path.join(__dirname,"/public")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const sessionOptions = {
-    secret : "pranjal",
+    secret : process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -73,6 +73,10 @@ app.use((req, res, next) => {
 });
 
 
+
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
 
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews",reviewsRouter);
