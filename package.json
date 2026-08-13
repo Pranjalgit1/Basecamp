@@ -1,4 +1,8 @@
 {
+
+  "engines" : {
+    "node" : "24.13.0"
+  },
   "name": "airbnb_clone",
   "version": "1.0.0",
   "description": "",

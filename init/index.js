@@ -1,9 +1,13 @@
+require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
+
 const mongoose = require("mongoose");
 const data = require("./data.js");
 const Listing = require("../models/listing.js");
 const User = require("../models/user.js");
 
-mongoose.connect("mongodb://127.0.0.1:27017/wanderlust")
+const db_url = process.env.ATLASDB_URL;
+
+mongoose.connect(db_url)
 .then(() => {
     console.log("database connected");
 })
