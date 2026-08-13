@@ -5,7 +5,10 @@ const express = require("express");
 
 const app = express();
 const mongoose = require("mongoose");
-const mongo_url = "mongodb://127.0.0.1:27017/wanderlust";
+// const mongo_url = "mongodb://127.0.0.1:27017/wanderlust";
+
+const db_url = process.env.ATLASDB_URL;
+
 const path = require("path");
 const ejsMate = require("ejs-mate");
 const session = require("express-session");
@@ -18,8 +21,9 @@ const passportLocalMongoose = require("passport-local-mongoose");
 const localStrategy = require("passport-local");
 const User = require("./models/user.js");
 const userRouter = require("./routes/user.js");
+
 async function main(){
-    await mongoose.connect(mongo_url);
+    await mongoose.connect(db_url);
 }
 
 main()
